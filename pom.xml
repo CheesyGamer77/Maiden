@@ -34,5 +34,12 @@
             <artifactId>CheeDA-Utilities</artifactId>
             <version>110bc16</version>
         </dependency>
+
+        <!-- JSON API -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
+        </dependency>
     </dependencies>
 </project>
