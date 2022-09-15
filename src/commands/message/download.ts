@@ -1,7 +1,19 @@
 import { Buffer } from 'node:buffer';
+import { APIEmbedAuthor, APIEmbedField, APIEmbedFooter, APIEmbedImage } from 'discord-api-types/v10';
 import { AttachmentBuilder, ChatInputCommandInteraction, CacheType, Colors, inlineCode, Message } from 'discord.js';
 import { Maiden } from '../../Maiden';
 import { SlashCommand } from '../internal/slash';
+
+type MinimalEmbedData = {
+    author?: APIEmbedAuthor
+    title?: string,
+    description?: string
+    color?: number,
+    image?: APIEmbedImage,
+    fields?: APIEmbedField[],
+    footer?: APIEmbedFooter,
+    timestamp?: string
+}
 
 /**
  * Downloads the JSON data of a particular Discord message.
@@ -19,9 +31,24 @@ export class MessageDownloadCommand extends SlashCommand {
     }
 
     private filterMessageData(message: Message) {
+        const embeds: MinimalEmbedData[] = [];
+
+        for (const embed of message.embeds) {
+            embeds.push({
+                author: embed.author ?? undefined,
+                title: embed.title ?? undefined,
+                description: embed.description ?? undefined,
+                color: embed.color ?? undefined,
+                image: embed.image ?? undefined,
+                fields: embed.fields.length > 0 ? embed.fields : undefined,
+                footer: embed.footer ?? undefined,
+                timestamp: embed.timestamp ?? undefined,
+            });
+        }
+
         return {
             content: message.content !== '' ? message.content : null,
-            embeds: message.embeds.length > 0 ? message.embeds : null,
+            embeds: embeds.length > 0 ? embeds : null,
             attachments: message.attachments,
         };
     }
