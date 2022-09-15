@@ -2,9 +2,11 @@ import { Client } from 'discord.js';
 import { CommandListener } from './internal';
 import { MessageDownloadCommand } from './message';
 import { WebhooksCommand } from './misc/webhooks';
+import { RoleCommands } from './role';
 
 export const commandListener = new CommandListener(
     new MessageDownloadCommand(),
+    new RoleCommands(),
     new WebhooksCommand(),
 );
 
