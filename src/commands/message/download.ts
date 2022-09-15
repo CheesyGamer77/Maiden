@@ -18,6 +18,14 @@ export class MessageDownloadCommand extends SlashCommand {
         );
     }
 
+    private filterMessageData(message: Message) {
+        return {
+            content: message.content !== '' ? message.content : null,
+            embeds: message.embeds.length > 0 ? message.embeds : null,
+            attachments: message.attachments,
+        };
+    }
+
     override async invoke(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
         const arg = interaction.options.getString('url', true);
 
@@ -45,7 +53,7 @@ export class MessageDownloadCommand extends SlashCommand {
         } catch (e) {
             await interaction.reply({
                 embeds: [{
-                    description: `:x: Couldn't download message with url ${inlineCode(arg)}}`,
+                    description: `:x: Couldn't download message with url ${inlineCode(arg)}`,
                     color: Colors.Red,
                 }],
                 ephemeral: true,
@@ -60,7 +68,7 @@ export class MessageDownloadCommand extends SlashCommand {
                     color: Colors.Green,
                 }],
                 files: [
-                    new AttachmentBuilder(Buffer.from(JSON.stringify(message.toJSON(), undefined, 4)), {
+                    new AttachmentBuilder(Buffer.from(JSON.stringify(this.filterMessageData(message), undefined, 4)), {
                         name: `message-${messageId}.json`,
                     }),
                 ],
