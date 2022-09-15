@@ -1,0 +1,10 @@
+{
+  "name": "Maiden",
+  "version": "0.0.1",
+  "description": "A helper and utility bot for Discord.",
+  "main": "dist/index.js",
+  "repository": "https://github.com/CheesyGamer77/Maiden",
+  "author": "CheesyGamer77 <43181046+CheesyGamer77@users.noreply.github.com>",
+  "license": "GPLv3",
+  "private": true
+}
