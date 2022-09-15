@@ -1,4 +1,5 @@
-import { Client, GatewayIntentBits } from 'discord.js';
+import { CacheType, Client, GatewayIntentBits, Interaction } from 'discord.js';
+import { commandListener, updateCommands } from './commands';
 
 const client = new Client({
     allowedMentions: {
@@ -15,6 +16,15 @@ const client = new Client({
     },
 });
 
-client.once('ready', () => console.log('Ready'));
+client.once('ready', async () => {
+    console.log('Ready');
+    await updateCommands(client);
+});
+
+client.on('interactionCreate', async (interaction: Interaction<CacheType>) => {
+    if(interaction.isChatInputCommand()) {
+        await commandListener.process(interaction);
+    }
+})
 
 export { client };
