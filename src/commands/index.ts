@@ -5,7 +5,7 @@ import { WebhooksCommand } from './misc/webhooks';
 
 export const commandListener = new CommandListener(
     new MessageDownloadCommand(),
-    new WebhooksCommand()
+    new WebhooksCommand(),
 );
 
 export async function updateCommands(client: Client) {

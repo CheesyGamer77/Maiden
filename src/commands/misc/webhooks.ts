@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer';
 import {
     AttachmentBuilder,
     CacheType,
@@ -5,7 +6,7 @@ import {
     ChatInputCommandInteraction,
     Colors,
     GuildTextBasedChannel,
-    PermissionFlagsBits
+    PermissionFlagsBits,
 } from 'discord.js';
 import { PermissionLockedSlashCommand } from '../internal/slash';
 
@@ -20,20 +21,22 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
             .setName('channel')
             .setDescription('The channel to list the webhooks of')
             .setRequired(false)
-            .addChannelTypes(ChannelType.GuildText, ChannelType.GuildVoice)
+            .addChannelTypes(ChannelType.GuildText, ChannelType.GuildVoice),
         );
     }
 
     override async invoke(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
-        const channel = (interaction.options.getChannel('channel', false) ?? interaction.channel) as GuildTextBasedChannel;
+        const channel = (interaction.options.getChannel(
+            'channel', false,
+            ) ?? interaction.channel) as GuildTextBasedChannel;
 
         if (channel === null) {
             await interaction.reply({
                 embeds: [{
-                    description: ":x: Well this is awkward... the channel provided is null",
-                    color: Colors.Red
+                    description: ':x: Well this is awkward... the channel provided is null',
+                    color: Colors.Red,
                 }],
-                ephemeral: true
+                ephemeral: true,
             });
             return;
         }
@@ -41,10 +44,10 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
         if (channel.type !== ChannelType.GuildText && channel.type !== ChannelType.GuildVoice) {
             await interaction.reply({
                 embeds: [{
-                    description: ":x: Can only list webhooks of channels of type `GUILD_TEXT` OR `GUILD_VOICE`",
-                    color: Colors.Red
+                    description: ':x: Can only list webhooks of channels of type `GUILD_TEXT` OR `GUILD_VOICE`',
+                    color: Colors.Red,
                 }],
-                ephemeral: true
+                ephemeral: true,
             });
             return;
         }
@@ -52,30 +55,30 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
         const webhooks = await channel.fetchWebhooks();
 
         let bufferString = '';
-        for(const [_, webhook] of webhooks) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for (const [_, webhook] of webhooks) {
             bufferString = bufferString.concat(`Name: ${webhook.name}\nID: ${webhook.id}\nURL: ${webhook.url}\n\n`);
         }
         bufferString = bufferString.trim();
 
-        if (webhooks.size == 0) {
+        if (webhooks.size === 0) {
             await interaction.reply({
                 embeds: [{
                     description: ':shrug: No webhooks to show',
-                    color: Colors.Gold
+                    color: Colors.Gold,
                 }],
-                ephemeral: true
+                ephemeral: true,
             });
-        }
-        else {
+        } else {
             await interaction.reply({
                 embeds: [{
                     description: `:white_check_mark: Showing ${webhooks.size} total webhooks in ${channel.toString()}`,
-                    color: Colors.Green
+                    color: Colors.Green,
                 }],
                 ephemeral: true,
                 files: [
-                    new AttachmentBuilder(Buffer.from(bufferString), { name: `webhooks-${channel.id}.txt`})
-                ]
+                    new AttachmentBuilder(Buffer.from(bufferString), { name: `webhooks-${channel.id}.txt` }),
+                ],
             });
         }
     }
