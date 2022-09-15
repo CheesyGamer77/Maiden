@@ -1,6 +1,7 @@
-import { AttachmentBuilder, ChatInputCommandInteraction, CacheType, Colors, DiscordAPIError, inlineCode, Message } from "discord.js";
-import { Maiden } from "../../Maiden";
-import { SlashCommand } from "../internal/slash";
+import { Buffer } from 'node:buffer';
+import { AttachmentBuilder, ChatInputCommandInteraction, CacheType, Colors, inlineCode, Message } from 'discord.js';
+import { Maiden } from '../../Maiden';
+import { SlashCommand } from '../internal/slash';
 
 /**
  * Downloads the JSON data of a particular Discord message.
@@ -13,42 +14,41 @@ export class MessageDownloadCommand extends SlashCommand {
             .setName('url')
             .setDescription('Discord Message URL')
             .setRequired(true)
-            .setMaxLength(150)
+            .setMaxLength(150),
         );
     }
 
     override async invoke(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
         const arg = interaction.options.getString('url', true);
 
-        let message: Message | undefined = undefined;
-        let [ guildId, channelId, messageId ] = '?';
+        let message: Message | undefined;
+        let [guildId, channelId, messageId] = '?';
         try {
-            const regex = new RegExp('(?:https?://)?(?:\w+\.)?discord.com/channels/');
-            [ guildId, channelId, messageId ] = arg.replace(regex, '').split('/');   
+            [guildId, channelId, messageId] = arg
+                .replace(/(?:https?:\/\/)?(?:\w+\.)?discord\.com\/channels\//g, '')
+                .split('/');
 
             const guild = Maiden.client.guilds.cache.get(guildId);
             const channel = guild?.channels.cache.get(channelId);
-            if(channel?.isTextBased()) {
+            if (channel?.isTextBased()) {
                 message = await channel.messages.fetch(messageId);
-            }
-            else {
+            } else {
                 await interaction.reply({
                     embeds: [{
                         description: ':x: Can only download messages from text-based channels',
-                        color: Colors.Red
+                        color: Colors.Red,
                     }],
-                    ephemeral: true
+                    ephemeral: true,
                 });
                 return;
             }
-        }
-        catch (e) {
+        } catch (e) {
             await interaction.reply({
                 embeds: [{
                     description: `:x: Couldn't download message with url ${inlineCode(arg)}}`,
-                    color: Colors.Red
+                    color: Colors.Red,
                 }],
-                ephemeral: true
+                ephemeral: true,
             });
             return;
         }
@@ -57,28 +57,26 @@ export class MessageDownloadCommand extends SlashCommand {
             await interaction.reply({
                 embeds: [{
                     description: ':white_check_mark: Message JSON data attached',
-                    color: Colors.Green
+                    color: Colors.Green,
                 }],
                 files: [
                     new AttachmentBuilder(Buffer.from(JSON.stringify(message.toJSON(), undefined, 4)), {
                         name: `message-${messageId}.json`,
-                    })
-                ]
-            })
-        }
-        else {
+                    }),
+                ],
+            });
+        } else {
             await interaction.reply({
                 embeds: [{
                     description: ':x: Well this is awkward... Something went wrong',
                     color: Colors.Red,
                     fields: [{
                         name: 'Parsed Message Data',
-                        value: `Guild: ${guildId}\nChannel: ${channelId}\nMessage: ${messageId}`
-                    }]
+                        value: `Guild: ${guildId}\nChannel: ${channelId}\nMessage: ${messageId}`,
+                    }],
                 }],
-                ephemeral: true
+                ephemeral: true,
             });
-            return;
         }
     }
 }

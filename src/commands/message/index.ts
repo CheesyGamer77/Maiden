@@ -1,5 +1,5 @@
-import { MessageDownloadCommand } from "./download"
+import { MessageDownloadCommand } from './download';
 
 export {
-    MessageDownloadCommand
-}
+    MessageDownloadCommand,
+};

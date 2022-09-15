@@ -22,9 +22,9 @@ client.once('ready', async () => {
 });
 
 client.on('interactionCreate', async (interaction: Interaction<CacheType>) => {
-    if(interaction.isChatInputCommand()) {
+    if (interaction.isChatInputCommand()) {
         await commandListener.process(interaction);
     }
-})
+});
 
 export { client };

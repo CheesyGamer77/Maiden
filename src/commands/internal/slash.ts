@@ -1,7 +1,14 @@
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from 'discord.js';
-import { ChatInputCommandInteraction, InteractionType } from 'discord.js';
+import {
+    ChatInputCommandInteraction,
+    InteractionType,
+    SlashCommandBuilder,
+    SlashCommandSubcommandBuilder,
+    SlashCommandSubcommandGroupBuilder,
+} from 'discord.js';
 
-abstract class CommandBase<BuilderType extends SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandSubcommandGroupBuilder> {
+type CommandBuilder = SlashCommandBuilder | SlashCommandSubcommandBuilder | SlashCommandSubcommandGroupBuilder;
+
+abstract class CommandBase<BuilderType extends CommandBuilder> {
     protected readonly name: string;
     protected readonly description: string;
 
@@ -55,20 +62,17 @@ export abstract class SlashCommand extends CommandBase<SlashCommandBuilder> {
     }
 
     override async process(interaction: ChatInputCommandInteraction) {
-        if (interaction.isChatInputCommand() && interaction.commandName == this.name) {
+        if (interaction.isChatInputCommand() && interaction.commandName === this.name) {
             const subcommand = interaction.options.getSubcommand(false);
             const subcommandGroup = interaction.options.getSubcommandGroup(false);
 
-            if (subcommandGroup == null && subcommand == null) {
+            if (subcommandGroup === null && subcommand === null) {
                 await this.invoke(interaction);
-            }
-            else if (subcommandGroup == null && subcommand != null) {
+            } else if (subcommandGroup === null && subcommand !== null) {
                 await this.subcommands.get(subcommand)?.process(interaction);
-            }
-            else if (subcommandGroup != null) {
+            } else if (subcommandGroup !== null) {
                 await this.subcommandGroups.get(subcommandGroup)?.process(interaction);
             }
-
         }
     }
 }
@@ -88,9 +92,9 @@ export abstract class Subcommand extends CommandBase<SlashCommandSubcommandBuild
     }
 
     override async process(interaction: ChatInputCommandInteraction) {
-        if (interaction.type == InteractionType.ApplicationCommand && interaction.isChatInputCommand()) {
+        if (interaction.type === InteractionType.ApplicationCommand && interaction.isChatInputCommand()) {
             const name = interaction.options.getSubcommand();
-            if (name == this.name) {
+            if (name === this.name) {
                 await this.invoke(interaction);
             }
         }
@@ -120,18 +124,19 @@ export abstract class SubcommandGroup extends CommandBase<SlashCommandSubcommand
     }
 
     override async process(interaction: ChatInputCommandInteraction) {
-        if (interaction.type == InteractionType.ApplicationCommand && interaction.isChatInputCommand()) {
+        if (interaction.type === InteractionType.ApplicationCommand && interaction.isChatInputCommand()) {
             const name = interaction.options.getSubcommandGroup();
             const subcommandName = interaction.options.getSubcommand();
 
-            if (name == this.name) {
+            if (name === this.name) {
                 await this.subcommands.get(subcommandName)?.process(interaction);
             }
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    override async invoke(_: ChatInputCommandInteraction) { return; }
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty-function, @typescript-eslint/no-empty-function
+    override async invoke(_: ChatInputCommandInteraction) { }
 }
 
 export abstract class GuildSlashCommand extends SlashCommand {

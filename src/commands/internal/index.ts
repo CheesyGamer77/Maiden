@@ -1,5 +1,5 @@
-import { SlashCommand } from './slash';
 import { CommandInteraction } from 'discord.js';
+import { SlashCommand } from './slash';
 
 export class CommandListener {
     private readonly commandMap: Map<string, SlashCommand> = new Map();
@@ -24,6 +24,5 @@ export class CommandListener {
         if (interaction.isChatInputCommand()) {
             await this.commandMap.get(interaction.commandName)?.process(interaction);
         }
-
     }
 }

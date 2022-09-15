@@ -1,9 +1,9 @@
 import { Client } from 'discord.js';
-import { CommandListener } from "./internal"
+import { CommandListener } from './internal';
 import { MessageDownloadCommand } from './message';
 
 export const commandListener = new CommandListener(
-    new MessageDownloadCommand()
+    new MessageDownloadCommand(),
 );
 
 export async function updateCommands(client: Client) {
