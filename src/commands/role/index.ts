@@ -1,6 +1,7 @@
 import { CacheType, ChatInputCommandInteraction, PermissionFlagsBits } from 'discord.js';
 import { RoleListMembersCommand } from './list-members';
 import { PermissionLockedSlashCommand } from '../internal/slash';
+import { RoleCompareMembersCommand } from './compare-members';
 
 export class RoleCommands extends PermissionLockedSlashCommand {
     constructor() {
@@ -8,6 +9,7 @@ export class RoleCommands extends PermissionLockedSlashCommand {
 
         this.addSubcommands(
             new RoleListMembersCommand(),
+            new RoleCompareMembersCommand()
         );
     }
 

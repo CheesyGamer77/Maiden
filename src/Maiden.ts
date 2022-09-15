@@ -13,6 +13,7 @@ export class Maiden {
 
     public static async fetchMembersWithRole(guild: Guild, role: Role) {
         const members = await guild.members.fetch();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         return members?.filter((member, _, __) => member.roles.cache.has(role.id));
     }
 }
