@@ -68,7 +68,7 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
 
         let bufferString = '';
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        for (const [_, webhook] of webhooks) {
+        for (const webhook of webhooks.values()) {
             bufferString = bufferString.concat(`Name: ${webhook.name}\nID: ${webhook.id}\nURL: ${webhook.url}\n\n`);
         }
         bufferString = bufferString.trim();
