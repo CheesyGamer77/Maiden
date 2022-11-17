@@ -59,6 +59,11 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
 
         const canManageWebhooks = hasPermissions({ ctx: ctx, perms: PermissionFlagsBits.ManageWebhooks });
         if (!canManageWebhooks) {
+            await ctx.reply({
+                embeds: [failEmbed({
+                    message: 'I can\'t access webhooks. Make sure I have the `MANAGE_WEBHOOKS` permission',
+                })],
+            });
             return;
         }
 
