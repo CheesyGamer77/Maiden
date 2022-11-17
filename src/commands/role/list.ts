@@ -1,5 +1,5 @@
 import { Buffer } from 'node:buffer';
-import { Subcommand } from 'cheesyutils.js';
+import { Subcommand, successEmbed } from 'cheesyutils.js';
 import { ChatInputCommandInteraction, CacheType, AttachmentBuilder, EmbedBuilder, Colors } from 'discord.js';
 
 export class RoleListCommand extends Subcommand {
@@ -25,10 +25,9 @@ export class RoleListCommand extends Subcommand {
         bufferString = bufferString.trim();
 
         await ctx.reply({
-            embeds: [new EmbedBuilder()
-                .setDescription(`:white_check_mark: Showing ${roles.size} total roles`)
-                .setColor(Colors.Green),
-            ],
+            embeds: [successEmbed({
+                message: `Showing ${roles.size} total roles`,
+            })],
             files: [
                 new AttachmentBuilder(Buffer.from(bufferString, 'utf-8'), { name: `roles-${guild.id}.txt` }),
             ],

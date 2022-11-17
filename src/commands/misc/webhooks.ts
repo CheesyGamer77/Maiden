@@ -1,5 +1,5 @@
 import { Buffer } from 'node:buffer';
-import { PermissionLockedSlashCommand } from 'cheesyutils.js';
+import { failEmbed, PermissionLockedSlashCommand, successEmbed } from 'cheesyutils.js';
 import {
     AttachmentBuilder,
     CacheType,
@@ -39,10 +39,9 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
         // also being nullable, despite requiring a cached state
         if (channel === null) {
             await ctx.reply({
-                embeds: [{
-                    description: ':x: Well this is awkward... the channel provided is null',
-                    color: Colors.Red,
-                }],
+                embeds: [failEmbed({
+                    message: 'Well this is awkward... the channel provided is null',
+                })],
                 ephemeral: true,
             });
             return;
@@ -50,10 +49,9 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
 
         if (channel.type !== ChannelType.GuildText && channel.type !== ChannelType.GuildVoice) {
             await ctx.reply({
-                embeds: [{
-                    description: ':x: Can only list webhooks of channels of type `GUILD_TEXT` OR `GUILD_VOICE`',
-                    color: Colors.Red,
-                }],
+                embeds: [failEmbed({
+                    message: 'Can only list webhooks of channels of type `GUILD_TEXT` OR `GUILD_VOICE`',
+                })],
                 ephemeral: true,
             });
             return;
@@ -83,10 +81,9 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
             });
         } else {
             await ctx.reply({
-                embeds: [{
-                    description: `:white_check_mark: Showing ${webhooks.size} total webhooks in ${channel.toString()}`,
-                    color: Colors.Green,
-                }],
+                embeds: [successEmbed({
+                    message: `Showing ${webhooks.size} total webhooks in ${channel.toString()}`,
+                })],
                 ephemeral: true,
                 files: [
                     new AttachmentBuilder(Buffer.from(bufferString), { name: `webhooks-${channel.id}.txt` }),

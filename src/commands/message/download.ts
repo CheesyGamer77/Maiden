@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer';
-import { SlashCommand } from 'cheesyutils.js';
+import { failEmbed, SlashCommand, successEmbed } from 'cheesyutils.js';
 import { APIEmbedAuthor, APIEmbedField, APIEmbedFooter, APIEmbedImage } from 'discord-api-types/v10';
-import { AttachmentBuilder, ChatInputCommandInteraction, CacheType, Colors, inlineCode, Message } from 'discord.js';
+import { AttachmentBuilder, ChatInputCommandInteraction, CacheType, inlineCode, Message } from 'discord.js';
 import { Maiden } from '../../Maiden';
 
 type MinimalEmbedData = {
@@ -69,20 +69,18 @@ export class MessageDownloadCommand extends SlashCommand {
                 message = await channel.messages.fetch(messageId);
             } else {
                 await ctx.reply({
-                    embeds: [{
-                        description: ':x: Can only download messages from text-based channels',
-                        color: Colors.Red,
-                    }],
+                    embeds: [failEmbed({
+                        message: 'Can only download messages from text-based channels',
+                    })],
                     ephemeral: true,
                 });
                 return;
             }
         } catch (e) {
             await ctx.reply({
-                embeds: [{
-                    description: `:x: Couldn't download message with url ${inlineCode(arg)}`,
-                    color: Colors.Red,
-                }],
+                embeds: [failEmbed({
+                    message: `Couldn't download message with url ${inlineCode(arg)}`,
+                })],
                 ephemeral: true,
             });
             return;
@@ -90,10 +88,9 @@ export class MessageDownloadCommand extends SlashCommand {
 
         if (message) {
             await ctx.reply({
-                embeds: [{
-                    description: ':white_check_mark: Message JSON data attached',
-                    color: Colors.Green,
-                }],
+                embeds: [successEmbed({
+                    message: 'Message JSON data attached',
+                })],
                 files: [
                     new AttachmentBuilder(Buffer.from(JSON.stringify(this.filterMessageData(message), undefined, 4)), {
                         name: `message-${messageId}.json`,
@@ -102,14 +99,13 @@ export class MessageDownloadCommand extends SlashCommand {
             });
         } else {
             await ctx.reply({
-                embeds: [{
-                    description: ':x: Well this is awkward... Something went wrong',
-                    color: Colors.Red,
-                    fields: [{
+                embeds: [
+                    failEmbed({
+                        message: 'Well this is awkward... Something went wrong',
+                    }).addFields({
                         name: 'Parsed Message Data',
                         value: `Guild: ${guildId}\nChannel: ${channelId}\nMessage: ${messageId}`,
-                    }],
-                }],
+                    })],
                 ephemeral: true,
             });
         }

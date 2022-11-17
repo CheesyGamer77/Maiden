@@ -1,5 +1,5 @@
 import { Buffer } from 'node:buffer';
-import { Subcommand } from 'cheesyutils.js';
+import { Subcommand, successEmbed } from 'cheesyutils.js';
 import { AttachmentBuilder, Colors, ChatInputCommandInteraction, CacheType, Role } from 'discord.js';
 import { intersection, union } from './setUtils';
 import { Maiden } from '../../Maiden';
@@ -60,17 +60,12 @@ export class RoleCompareMembersCommand extends Subcommand {
         bufferString = bufferString.trim();
 
         await ctx.editReply({
-            embeds: [{
-                // eslint-disable-next-line max-len
-                description: `:white_check_mark: Comparing members for roles ${parent.toString()} and ${child.toString()}`,
-                color: Colors.Green,
-                fields: [
-                    {
-                        name: 'Total Members',
-                        value: `${total.size} (${both.size} with both roles)`,
-                    },
-                ],
-            }],
+            embeds: [successEmbed({
+                message: `Comparing members for roles ${parent.toString()} and ${child.toString()}`,
+            }).addFields({
+                name: 'Total Members',
+                value: `${total.size} (${both.size} with both roles)`,
+            })],
             files: [
                 new AttachmentBuilder(Buffer.from(bufferString, 'utf-8'),
                     { name: `role-members-${parent.id}-${child.id}.txt` },

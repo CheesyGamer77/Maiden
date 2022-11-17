@@ -1,5 +1,5 @@
 import { Buffer } from 'node:buffer';
-import { Subcommand } from 'cheesyutils.js';
+import { Subcommand, successEmbed } from 'cheesyutils.js';
 import { AttachmentBuilder, Colors, ChatInputCommandInteraction, CacheType, Role } from 'discord.js';
 import { Maiden } from '../../Maiden';
 
@@ -40,10 +40,9 @@ export class RoleListMembersCommand extends Subcommand {
             });
         } else {
             await ctx.reply({
-                embeds: [{
-                    description: `:white_check_mark: Showing ${role.members.size} members with role ${role.toString()}`,
-                    color: Colors.Green,
-                }],
+                embeds: [successEmbed({
+                    message: `Showing ${role.members.size} members with role ${role.toString()}`,
+                })],
                 files: [
                     new AttachmentBuilder(Buffer.from(bufferString, 'utf-8'), { name: `role-members-${role.id}.txt` }),
                 ],
