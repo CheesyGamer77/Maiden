@@ -1,14 +1,12 @@
 import { Buffer } from 'node:buffer';
+import { Subcommand } from 'cheesyutils.js';
 import { AttachmentBuilder, Colors, ChatInputCommandInteraction, CacheType, Role } from 'discord.js';
 import { intersection, union } from './setUtils';
 import { Maiden } from '../../Maiden';
-import { Subcommand } from '../internal/slash';
-
-
 export class RoleCompareMembersCommand extends Subcommand {
     constructor() {
         super('compare-members', 'Compares two roles in terms of their members');
-        this.dataBuilder
+        this.data
             .addRoleOption(opt => opt
                 .setName('parent')
                 .setDescription('The source role')

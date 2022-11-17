@@ -1,8 +1,8 @@
 import { Buffer } from 'node:buffer';
+import { SlashCommand } from 'cheesyutils.js';
 import { APIEmbedAuthor, APIEmbedField, APIEmbedFooter, APIEmbedImage } from 'discord-api-types/v10';
 import { AttachmentBuilder, ChatInputCommandInteraction, CacheType, Colors, inlineCode, Message } from 'discord.js';
 import { Maiden } from '../../Maiden';
-import { SlashCommand } from '../internal/slash';
 
 type MinimalEmbedData = {
     author?: APIEmbedAuthor
@@ -22,7 +22,7 @@ export class MessageDownloadCommand extends SlashCommand {
     constructor() {
         super('download', 'Returns a JSON file of a message\'s data');
 
-        this.dataBuilder.addStringOption(arg => arg
+        this.data.addStringOption(arg => arg
             .setName('url')
             .setDescription('Discord Message URL')
             .setRequired(true)
