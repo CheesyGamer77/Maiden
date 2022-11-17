@@ -1,6 +1,7 @@
 import { PermissionLockedSlashCommand } from 'cheesyutils.js';
 import { CacheType, ChatInputCommandInteraction, PermissionFlagsBits } from 'discord.js';
 import { RoleCompareMembersCommand } from './compare-members';
+import { RoleListCommand } from './list';
 import { RoleListMembersCommand } from './list-members';
 
 export class RoleCommands extends PermissionLockedSlashCommand {
@@ -10,6 +11,7 @@ export class RoleCommands extends PermissionLockedSlashCommand {
         this.addSubcommands(
             new RoleListMembersCommand(),
             new RoleCompareMembersCommand(),
+            new RoleListCommand(),
         );
     }
 
