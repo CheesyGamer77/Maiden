@@ -14,7 +14,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "cheesyutils.js": "^0.0.6",
+    "cheesyutils.js": "^0.0.10",
     "discord-api-types": "^0.37.10",
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.2"
