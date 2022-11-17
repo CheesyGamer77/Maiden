@@ -13,9 +13,12 @@ export class RoleListCommand extends Subcommand {
         }
 
         const guild = ctx.guild;
-        const roles = guild.roles.cache;
+
+        // Sort roles by position
+        const roles = guild.roles.cache.sorted((a, b) => b.position - a.position);
 
         let bufferString = '';
+
         for (const [id, role] of roles) {
             bufferString += `${role.name} - ${id}\n`;
         }
