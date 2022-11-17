@@ -14,14 +14,14 @@ export class RoleListMembersCommand extends Subcommand {
         );
     }
 
-    override async invoke(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
-        if (interaction.guild === null) {
+    override async invoke(ctx: ChatInputCommandInteraction<CacheType>): Promise<void> {
+        if (ctx.guild === null) {
             return;
         }
 
-        const role = interaction.options.getRole('role', true) as Role;
+        const role = ctx.options.getRole('role', true) as Role;
 
-        const members = await Maiden.fetchMembersWithRole(interaction.guild, role);
+        const members = await Maiden.fetchMembersWithRole(ctx.guild, role);
 
         let bufferString = '';
         for (const [id, member] of members ?? []) {
@@ -32,14 +32,14 @@ export class RoleListMembersCommand extends Subcommand {
         bufferString = bufferString.trim();
 
         if (role.members.size === 0) {
-            await interaction.reply({
+            await ctx.reply({
                 embeds: [{
                     description: `:shrug: There aren't any members with the ${role.toString()} role`,
                     color: Colors.Gold,
                 }],
             });
         } else {
-            await interaction.reply({
+            await ctx.reply({
                 embeds: [{
                     description: `:white_check_mark: Showing ${role.members.size} members with role ${role.toString()}`,
                     color: Colors.Green,

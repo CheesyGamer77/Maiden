@@ -25,13 +25,13 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
         );
     }
 
-    override async invoke(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
-        const channel = (interaction.options.getChannel(
+    override async invoke(ctx: ChatInputCommandInteraction<CacheType>): Promise<void> {
+        const channel = (ctx.options.getChannel(
             'channel', false,
-            ) ?? interaction.channel) as GuildTextBasedChannel;
+            ) ?? ctx.channel) as GuildTextBasedChannel;
 
         if (channel === null) {
-            await interaction.reply({
+            await ctx.reply({
                 embeds: [{
                     description: ':x: Well this is awkward... the channel provided is null',
                     color: Colors.Red,
@@ -42,7 +42,7 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
         }
 
         if (channel.type !== ChannelType.GuildText && channel.type !== ChannelType.GuildVoice) {
-            await interaction.reply({
+            await ctx.reply({
                 embeds: [{
                     description: ':x: Can only list webhooks of channels of type `GUILD_TEXT` OR `GUILD_VOICE`',
                     color: Colors.Red,
@@ -62,7 +62,7 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
         bufferString = bufferString.trim();
 
         if (webhooks.size === 0) {
-            await interaction.reply({
+            await ctx.reply({
                 embeds: [{
                     description: ':shrug: No webhooks to show',
                     color: Colors.Gold,
@@ -70,7 +70,7 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
                 ephemeral: true,
             });
         } else {
-            await interaction.reply({
+            await ctx.reply({
                 embeds: [{
                     description: `:white_check_mark: Showing ${webhooks.size} total webhooks in ${channel.toString()}`,
                     color: Colors.Green,

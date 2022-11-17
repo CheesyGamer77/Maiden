@@ -53,8 +53,8 @@ export class MessageDownloadCommand extends SlashCommand {
         };
     }
 
-    override async invoke(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
-        const arg = interaction.options.getString('url', true);
+    override async invoke(ctx: ChatInputCommandInteraction<CacheType>): Promise<void> {
+        const arg = ctx.options.getString('url', true);
 
         let message: Message | undefined;
         let [guildId, channelId, messageId] = '?';
@@ -68,7 +68,7 @@ export class MessageDownloadCommand extends SlashCommand {
             if (channel?.isTextBased()) {
                 message = await channel.messages.fetch(messageId);
             } else {
-                await interaction.reply({
+                await ctx.reply({
                     embeds: [{
                         description: ':x: Can only download messages from text-based channels',
                         color: Colors.Red,
@@ -78,7 +78,7 @@ export class MessageDownloadCommand extends SlashCommand {
                 return;
             }
         } catch (e) {
-            await interaction.reply({
+            await ctx.reply({
                 embeds: [{
                     description: `:x: Couldn't download message with url ${inlineCode(arg)}`,
                     color: Colors.Red,
@@ -89,7 +89,7 @@ export class MessageDownloadCommand extends SlashCommand {
         }
 
         if (message) {
-            await interaction.reply({
+            await ctx.reply({
                 embeds: [{
                     description: ':white_check_mark: Message JSON data attached',
                     color: Colors.Green,
@@ -101,7 +101,7 @@ export class MessageDownloadCommand extends SlashCommand {
                 ],
             });
         } else {
-            await interaction.reply({
+            await ctx.reply({
                 embeds: [{
                     description: ':x: Well this is awkward... Something went wrong',
                     color: Colors.Red,

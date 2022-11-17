@@ -20,16 +20,16 @@ export class RoleCompareMembersCommand extends Subcommand {
             );
     }
 
-    override async invoke(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
-        const guild = interaction.guild;
+    override async invoke(ctx: ChatInputCommandInteraction<CacheType>): Promise<void> {
+        const guild = ctx.guild;
         if (guild === null) {
             return;
         }
 
-        await interaction.deferReply();
+        await ctx.deferReply();
 
-        const parent = interaction.options.getRole('parent', true) as Role;
-        const child = interaction.options.getRole('child', true) as Role;
+        const parent = ctx.options.getRole('parent', true) as Role;
+        const child = ctx.options.getRole('child', true) as Role;
 
         const parentMembers = await Maiden.fetchMembersWithRole(guild, parent);
         const childMembers = await Maiden.fetchMembersWithRole(guild, child);
@@ -59,7 +59,7 @@ export class RoleCompareMembersCommand extends Subcommand {
 
         bufferString = bufferString.trim();
 
-        await interaction.editReply({
+        await ctx.editReply({
             embeds: [{
                 // eslint-disable-next-line max-len
                 description: `:white_check_mark: Comparing members for roles ${parent.toString()} and ${child.toString()}`,
