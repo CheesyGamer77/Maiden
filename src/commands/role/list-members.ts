@@ -1,13 +1,13 @@
 import { Buffer } from 'node:buffer';
+import { Subcommand } from 'cheesyutils.js';
 import { AttachmentBuilder, Colors, ChatInputCommandInteraction, CacheType, Role } from 'discord.js';
 import { Maiden } from '../../Maiden';
-import { Subcommand } from '../internal/slash';
 
 export class RoleListMembersCommand extends Subcommand {
     constructor() {
         super('list-members', 'Lists all users with the given role');
 
-        this.dataBuilder.addRoleOption(opt => opt
+        this.data.addRoleOption(opt => opt
             .setName('role')
             .setDescription('The role to list the members of')
             .setRequired(true),
