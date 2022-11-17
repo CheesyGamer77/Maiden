@@ -9,6 +9,7 @@ import {
     GuildTextBasedChannel,
     PermissionFlagsBits,
 } from 'discord.js';
+import { hasPermissions } from '../../util/checks';
 
 /**
  * Lists all webhooks in a given channel
@@ -26,6 +27,10 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
     }
 
     override async invoke(ctx: ChatInputCommandInteraction<CacheType>): Promise<void> {
+        if (!ctx.inCachedGuild()) {
+            return;
+        }
+
         const channel = (ctx.options.getChannel(
             'channel', false,
             ) ?? ctx.channel) as GuildTextBasedChannel;
@@ -49,6 +54,11 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
                 }],
                 ephemeral: true,
             });
+            return;
+        }
+
+        const canManageWebhooks = hasPermissions({ ctx: ctx, perms: PermissionFlagsBits.ManageWebhooks });
+        if (!canManageWebhooks) {
             return;
         }
 
