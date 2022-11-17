@@ -35,6 +35,8 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
             'channel', false,
             ) ?? ctx.channel) as GuildTextBasedChannel;
 
+        // This null check is still needed due to ctx.channel
+        // also being nullable, despite requiring a cached state
         if (channel === null) {
             await ctx.reply({
                 embeds: [{
