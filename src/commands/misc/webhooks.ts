@@ -1,4 +1,5 @@
 import { Buffer } from 'node:buffer';
+import { PermissionLockedSlashCommand } from 'cheesyutils.js';
 import {
     AttachmentBuilder,
     CacheType,
@@ -8,7 +9,6 @@ import {
     GuildTextBasedChannel,
     PermissionFlagsBits,
 } from 'discord.js';
-import { PermissionLockedSlashCommand } from '../internal/slash';
 
 /**
  * Lists all webhooks in a given channel
@@ -17,7 +17,7 @@ export class WebhooksCommand extends PermissionLockedSlashCommand {
     constructor() {
         super('webhooks', 'Lists all webhooks for a given channel', PermissionFlagsBits.ManageWebhooks);
 
-        this.dataBuilder.addChannelOption(opt => opt
+        this.data.addChannelOption(opt => opt
             .setName('channel')
             .setDescription('The channel to list the webhooks of')
             .setRequired(false)
