@@ -1,6 +1,6 @@
 import { CommandListener } from 'cheesyutils.js';
 import { Client } from 'discord.js';
-import { MessageDownloadCommand } from './message';
+import { MessageDownloadCommand } from './misc/download';
 import { WebhooksCommand } from './misc/webhooks';
 import { RoleCommands } from './role';
 
