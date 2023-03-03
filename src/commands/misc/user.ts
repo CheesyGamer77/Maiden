@@ -131,7 +131,7 @@ export class UserCommand extends SlashCommand {
             content: user.id,
             embeds: [
                 new EmbedBuilder()
-                    .setAuthor({ name: user.tag, iconURL: user.avatar ?? user.defaultAvatarURL })
+                    .setAuthor({ name: user.tag, iconURL: user.avatarURL() ?? user.defaultAvatarURL })
                     .setTitle('User Info')
                     .setColor(user.accentColor ?? null)
                     .addFields(fields),
