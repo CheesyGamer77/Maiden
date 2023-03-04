@@ -9,6 +9,7 @@ import {
     APIEmbedField,
     Guild,
     UserFlagsString,
+    PermissionFlagsBits,
 } from 'discord.js';
 
 type FlagEmojiContainer = {
@@ -102,7 +103,7 @@ export class UserCommand extends SlashCommand {
         };
     }
 
-    private getStatusField(user: User, guild: Guild): APIEmbedField {
+    private async getStatusField(user: User, guild: Guild): Promise<APIEmbedField> {
         const name = 'Status';
 
         // Check if the user is a member of the guild
@@ -116,9 +117,24 @@ export class UserCommand extends SlashCommand {
             };
         }
 
+        let value = 'Not Joined';
+
+        if (guild.members?.me?.permissions.has(PermissionFlagsBits.BanMembers)) {
+            // eslint-disable-next-line no-empty-function
+            try {
+                const ban = await guild.bans.fetch(user.id);
+                value = ban.reason ? `BANNED: ${ban.reason}` : 'BANNED';
+            } catch (ignored) {
+                return {
+                    name,
+                    value,
+                };
+            }
+        }
+
         return {
             name,
-            value: 'Not Joined',
+            value,
         };
     }
 
@@ -130,7 +146,7 @@ export class UserCommand extends SlashCommand {
         ];
 
         if (ctx.guild) {
-            fields.push(this.getStatusField(user, ctx.guild));
+            fields.push(await this.getStatusField(user, ctx.guild));
         }
 
         await ctx.reply({
