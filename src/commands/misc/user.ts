@@ -78,7 +78,10 @@ export class UserCommand extends SlashCommand {
                 emoji: '<:early_supporter:848344299976523797>',
             });
 
-        const flags = user.flags ? user.flags : await user.fetchFlags();
+            let flags = user.flags;
+            if (!flags) {
+                flags = await user.fetchFlags();
+            }
 
         const lines: string[] = [];
 
@@ -90,9 +93,14 @@ export class UserCommand extends SlashCommand {
             }
         }
 
+        let value = lines.join('\n');
+        if (lines.length === 0) {
+            value = 'None';
+        }
+
         return {
             name: 'User Flags',
-            value: lines.join('\n'),
+            value,
         };
     }
 
