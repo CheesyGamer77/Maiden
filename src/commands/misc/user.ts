@@ -83,15 +83,13 @@ export class UserCommand extends SlashCommand {
                 flags = await user.fetchFlags();
             }
 
-        const lines: string[] = [];
-
-        for (const flag of flags.toArray()) {
-            const container = flagsMap.get(flag);
-
-            if (container) {
-                lines.push(`• ${container.emoji} ${container.name}`);
-            }
-        }
+        const lines = flags.toArray()
+            .flatMap(flag => {
+                const container = flagsMap.get(flag);
+                return container ? container : [];
+            })
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(container => `• ${container.emoji} ${container.name}`);
 
         let value = lines.join('\n');
         if (lines.length === 0) {
