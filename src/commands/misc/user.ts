@@ -23,7 +23,7 @@ export class UserCommand extends SlashCommand {
         this.data.addUserOption(opt => opt
                 .setName('user')
             .setDescription('The user to retrieve information for')
-            .setRequired(true),
+            .setRequired(false),
         );
     }
 
@@ -139,9 +139,10 @@ export class UserCommand extends SlashCommand {
     }
 
     override async invoke(ctx: ChatInputCommandInteraction<CacheType>): Promise<void> {
-        const user = ctx.options.getUser('user', true);
+        const user = ctx.options.getUser('user', false) ?? ctx.user;
 
         const fields: APIEmbedField[] = [
+            { name: 'Created', value: time(user.createdAt, TimestampStyles.ShortDateTime) },
             await this.getUserFlagsField(user),
         ];
 
@@ -155,8 +156,10 @@ export class UserCommand extends SlashCommand {
                 new EmbedBuilder()
                     .setAuthor({ name: user.tag, iconURL: user.avatarURL() ?? user.defaultAvatarURL })
                     .setTitle('User Info')
+                    .setThumbnail(user.avatarURL())
                     .setColor(user.accentColor ?? null)
-                    .addFields(fields),
+                    .addFields(fields)
+                    .setFooter({ text: `User ID: ${user.id}` }),
             ],
         });
     }
