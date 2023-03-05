@@ -38,3 +38,13 @@ export function intersection<T>(a: Set<T>, b: Set<T>) {
     }
     return _intersection;
 }
+
+/**
+ * Set Equality
+ * @param {Set<T>} a First Set
+ * @param {Set<T>} b Second set
+ * @returns {boolean} Whether sets a and b are equal
+ */
+export function equals<T>(a: Set<T>, b: Set<T>) {
+    return a.size === b.size && [...a].every(val => b.has(val));
+}
