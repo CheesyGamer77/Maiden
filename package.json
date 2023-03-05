@@ -11,7 +11,8 @@
     "build": "yarn clean && tsc",
     "clean": "rimraf ./dist",
     "deploy": "yarn build && node ./dist/index.js",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "test": "jest"
   },
   "dependencies": {
     "cheesyutils.js": "^0.0.10",
