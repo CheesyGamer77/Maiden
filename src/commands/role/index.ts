@@ -3,6 +3,7 @@ import { CacheType, ChatInputCommandInteraction, PermissionFlagsBits } from 'dis
 import { RoleCompareMembersCommand } from './compare-members';
 import { RoleListCommand } from './list';
 import { RoleListMembersCommand } from './list-members';
+import { RoleReplaceCommand } from './replace';
 
 export class RoleCommands extends PermissionLockedSlashCommand {
     constructor() {
@@ -12,6 +13,7 @@ export class RoleCommands extends PermissionLockedSlashCommand {
             new RoleListMembersCommand(),
             new RoleCompareMembersCommand(),
             new RoleListCommand(),
+            new RoleReplaceCommand(),
         );
     }
 
