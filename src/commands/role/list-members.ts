@@ -15,11 +15,11 @@ export class RoleListMembersCommand extends Subcommand {
     }
 
     override async invoke(ctx: ChatInputCommandInteraction<CacheType>): Promise<void> {
-        if (ctx.guild === null) {
+        if (!ctx.inCachedGuild()) {
             return;
         }
 
-        const role = ctx.options.getRole('role', true) as Role;
+        const role = ctx.options.getRole('role', true);
 
         const members = await Maiden.fetchMembersWithRole(ctx.guild, role);
 
