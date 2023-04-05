@@ -10,7 +10,7 @@
   "scripts": {
     "build": "yarn clean && tsc",
     "clean": "rimraf ./dist",
-    "deploy": "yarn build && node ./dist/index.js",
+    "deploy": "yarn build && node ./dist",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "jest"
   },
